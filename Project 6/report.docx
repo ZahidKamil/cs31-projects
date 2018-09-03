@@ -1,0 +1,122 @@
+Spring 2018 CS 31
+Project 6 Solutions
+1.
+First, because of the operators' order of precedence, the expression *ptr + 1 = 20 means (*ptr) + 1 = 20. The expression (*ptr) + 1 evaluates to the int 11, not an int variable that can be assigned to. When corrected to *(ptr+1) = 20, the expression means *(&arr[1]) = 20, which means arr[1] = 20.
+
+Second, the while loop doesn't access arr[2] and tries to access arr[-1]. One possible fix is
+
+	ptr++;
+        while (ptr > arr)
+        {
+            ptr--;
+            cout << ' ' << *ptr;    // print values
+        }
+findDisorder puts the correct value in p, but p is a copy of the caller's variable ptr, so findDisorder has no effect on ptr. The parameter p must be passed by reference, not by value:
+
+	void findDisorder(int arr[], int n, int*& p)
+The declaration double* p; declares p to be a pointer to double, but leaves it uninitialized — it does not point to any particular double. That uninitialized pointer is copied into the parameter resultPtr. In the expression *resultPtr = sqrt(…), the attempt to dereference the uninitialized resultPtr pointer leads to undefined behavior. A fix would be to make sure hypotenuse is passed a valid pointer; one possibility is:
+
+	double d;
+	double* p = &d;
+The test str1 != 0 is asking if the str1 pointer itself has a value different from the null pointer. (The integer constant 0 used in a context where a pointer is required means the null pointer.) The test we want, though, is to see if the character pointed to by str1 is different from the zero byte that marks the end of a C-string. (The same applies to str2.)
+
+Similarly, the test str1 != str2 is asking whether those two pointers have different values (i.e., they point to different places). But what should be tested is whether the characters they point to have different values. (The same applies to str1 == str2.)
+
+The corrected function body is thus
+
+	while (*str1 != 0  &&  *str2 != 0)  // '\0' instead of 0 is also OK
+	{
+	    if (*str1 != *str2)
+		return false;
+	    str1++;
+	    str2++;
+	}
+	return *str1 == *str2;
+The storage for the local variable arr goes away when the function computeSquares returns. But that function returns a pointer to that storage. Attempting to follow that pointer in the main routine (implied by ptr[i]) yields undefined behavior.
+
+2.
+string* fp;
+string fish[5];
+fp = &fish[4];   or   fp = fish + 4;
+*fp = "yellowtail";
+*(fish + 3) = "salmon";
+fp -= 3;
+fp[1] = "loach";
+fp[0] = "eel";
+bool d = (fp == fish);   or   bool d = (fp == &fish[0]);   or an equivalent if statement
+bool b = (*fp == *(fp+1));   or an equivalent if statement
+
+3.
+double computeAverage(const double* scores, int nScores)
+{
+    int k = 0;
+    double tot = 0;
+    while (k != nScores)
+    {
+        tot += *(scores + k);
+        k++;
+    }
+    return tot/nScores;
+}
+const char* findTheChar(const char* str, char chr)
+{
+    for (int k = 0; *(str+k) != 0; k++)
+        if (*(str+k) == chr)
+            return str + k;
+
+    return nullptr;
+}
+const char* findTheChar(const char* str, char chr)
+{
+    for ( ; *str != 0; str++)
+        if (*str == chr)
+            return str;
+
+    return nullptr;
+}
+
+4.
+diff=1	(see notes 2 and 5 below)
+4	(see notes 6 and 7 below)
+79	(see notes 4 and 6 below)
+5	(see note 7 below)
+9	(see note 1 below)
+-1	(see notes 2 and 3 below)
+19
+minimart is called with pointers to array[0] and array[2]. It returns a pointer to whichever of the ints pointed to has a smaller value. Since array[2] has the smaller value, the function returns &array[2]. The expression ptr[1] = 9 sets array[3] to 9.
+ptr += 2; sets ptr to &array[4].
+*ptr = -1; sets array[4] to -1.
+*(array+1) = 79; sets array[1] to 79.
+&array[5] - &array[4] is 1.
+The swap1 function swaps its copies of the pointers passed in to it, with no effect on the ints pointed to.
+The swap2 function swaps the ints pointed to.
+5.
+void deleteG(char* source)
+{
+    char* destination = source;
+    for ( ; *source != '\0'; source++)
+    {
+	if (*source != 'g'  &&  *source != 'G')
+	{
+	    *destination = *source;
+	    destination++;
+	}
+    }
+    *destination = '\0';  // Don't forget the zero byte at the end
+}
+or
+
+void deleteG(char* source)
+{
+    char* destination = source;
+    while (*source != '\0')
+    {
+	if (*source != 'g'  &&  *source != 'G')
+	{
+	    *destination = *source;
+	    destination++;
+	}
+	source++;
+    }
+    *destination = '\0';  // Don't forget the zero byte at the end
+}
