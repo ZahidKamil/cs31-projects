@@ -1,0 +1,30 @@
+Kevin Hahn
+UID: 504-914-505
+CS 31: Spring 2018
+
+Report - Project 2
+
+(a):
+Some obstacles overcome were figuring out the correct if-ladder that would correctly handle each cutoff in productValue when calculating the import duty.
+Another obstacle was figuring how to order my code so that it gathers all 3 inputs before outputting one of the error messages or the importer's import duty statement.
+ 
+(b):
+Test Data:
+Format of a test case will be (string importer, double value, string productName). For example, ("Elboni Motors", 500, "steel") means that I input Elboni Motors for the variable importer, 500 for the the product's value, and steel for the name of the product.
+
+-Entering 0 for the product value, such as ("Elboni Motors", 0, "aluminum"), because even if the product value is 0, we want to make sure that the import duty, when printed in the final line of output after the line of 3 hyphens, has 1 digit to the left of the decimal point and 2 digits to the right of the decimal point (i.e., 0.00).
+
+-Negative product values, such as ("Elboni Motors", -500, "aluminum") because these will lead to nonsensical results and the program should output "The product value must not be negative." for input values like these.
+
+-Boundary inputs such as ("Elboni Motors", 500, "aluminum"), ("Elboni Motors", 501, "aluminum"), ("Elboni Motors", 900, "aluminum"), ("Elboni Motors", 901, "aluminum") because we want to make sure that the program doesn't erroneously overestimate or underestimate the value of our import duty for these inputted product values.
+
+-Inputs with productValues greater than 500 trillion grubnicks and product being either pigs or mud, such as (Elboni Farms, 501, pigs), (Elboni Farms, 501, mud), (Elboni Farms, 901, mud), (Elboni Farms, 901, pigs), because we want to make sure the program correctly multiplies by 29% instead of 25% for the 400 trillion grubnicks that are beyond the initial 500 trillion grubnicks.
+
+-Entering an empty string ("", 500, aluminum), ("Elboni Motors", 500, ""), or ("", 500, "") for either productName or importer, or both because we want to make sure the program handles and outputs the correct error message. My code chose to gather all the input and report only the earliest erroneous item.
+
+-Entering a non-number input for the product's value, such as ("Elboni Motors", "cars", "aluminum"), ("Elboni Motors, "  ", "aluminum"), ("Elboni Motors", "", "aluminum") because an input like this would produce a nonsensical result. My program did not handle this correctly. 
+
+-Entering a number for the either importer or productName, or both, because we want to know whether our program our program would still treat these numerical inputs as strings for these two variables. Inputs such as (76, 500, "aluminum"), ("Elboni Motors", 500, 76), (-500, 500, "aluminum).
+
+-Entering a space for either importer or productName, or both (" ", 500, " "), (" ", 500, "aluminum"), ("Elboni Motors", 500, " ") because we want to make sure the code still reads this as a valid string input and outputs the intended import duty statement.
+
