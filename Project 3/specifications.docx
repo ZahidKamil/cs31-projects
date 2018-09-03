@@ -154,3 +154,4 @@ Sure. For the song string g/r3//y/b0//o2/, beat #2, r3/, requires that the next 
 For the song string g/r6//, beat #2, r6/, requires that the next five beats (#3 through #7) be just /. Beat #3 of the string is /, but the song ends with no beats #4 through #7, so badBeat must be set to 4, one more than the number of beats in the string.
 For the song string g/r3///, which is translatable, or the song string Nice For What, which is syntactically incorrect, translateSong must not change the value of badBeat at all.
 
+// end of specs
