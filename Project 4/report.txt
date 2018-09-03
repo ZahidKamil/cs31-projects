@@ -1,0 +1,42 @@
+Kevin Hahn
+UID: 504-914-505
+CS 31: Spring 2018
+
+Project 4 Report
+
+1. Some notable obstacles included continuously making sure I avoided the off-by-one error in my loops for the functions eliminateDups, makeMerger, and separate. Another obstacle was figuring out how to traverse the array, and compare one position to the rest of the array. Edge cases such as the last position of the erray and first position of the array were tough to handle and make sure that the function didn't fail on those bounddary cases.
+
+2. Test data
+a[7] = {"Wade County", "Lebronto", "Lebronto", "Boogie", "The Brow", "Splash Bros", "Trust the Process", "Jesus Shuttlesworth"}
+string h[7] = { "romanoff", "thor", "rogers", "banner", "", "parker", "rogers" };
+1	assert(tally(a, 7, "Boogie") == 1); // Boogie is found only once in this array.
+2	assert(tally(a, 7, "") == 0); // 
+3	assert(findMatch(a, 7, "Lebronto") == 1);
+4	assert(findMatch(a, 2, "Splash Bros") == -1);
+5	int start;
+6	int end;
+7	assert(findRun(a, 7, "Lebronto", begin, end) && start == 1 && end == 2); // run is 2, so start and end should be positions 1 and 2.
+8	assert(findRun(a, 7, "The Brow", begin, end) && start == 4 && end == 4); // run is only 1, so start and end should be same
+9	string g[4] = { "Wade County", "Lebronto", "Brodie", "Mo Buckets", "Uncle Drew", "Lob City"};
+10	assert(positionOfMin(a, 7) == 3); // "Boogie" is less than all other strings 
+11	assert(findDifference(a, 6, g, 4) == 2); // position 2 should when the corresponding elements are not equal 
+12	assert(findDifference(a, 2, g, 1) == 1); // one of the arrays runs out, so 
+						// the function should return position 1 since its the smaller of n1 and n2
+13	assert(subsequence(a, 7, g, 2)); // Wade County and Lebronto in array g are a subsequence of array a, so function should return true
+14	assert(moveToEnd(g, 6, 1) == 1 && g[2] == "Mo Buckets"); // Lebronto should be moved to the end, all elements after it should be moved 											// one to the left
+15	string f[4] = { "Codylove", "Redturn2", "CT3", "Kersh" };
+16	assert(moveToBeginning(f, 4, 2) == 2 && f[0] == "CT3" && f[2] == "Redturn2");
+17
+18	string e[5] = { "Lindor", "Lindor", "Lindor", "Correa", "Correa" };
+19	assert(eliminateDups(e, 5) == 2 && e[1] == "thor"); // we want to make sure the function only returns the number retained elements, which is 2
+20	string d[9] = {
+21	"Murphy", "Harper", "Scherzer", "Scherzer", "Strasburg", "Strasburg", "Strasburg", "Scherzer", "Scherzer"};
+22	assert(eliminateDups(d, 9) == 5 && d[1] == "Harper");  
+23	string x[4] = { "Stanton", "Judge", "Gregorius", "Severino" };
+24	string y[4] = { "Paxton", "King Felix", "Cano", "Seager" };
+25	string z[10];
+26	assert(makeMerger(x, 4, y, 4, z, 10) == 8 && z[5] == "Seager");
+27	// We want to make sure the function merges the 2 arrays correctly, and the element at position 5 should be "Seager"
+28	assert(separate(a, 7, "Father Prime") == 1); // should return 1 because Jesus Shuttlesworth would be at position 1, and that is the first
+						    // element that is not less than Father Prime
+
