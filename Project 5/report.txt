@@ -1,0 +1,45 @@
+Kevin Hahn
+UID: 504-914-505
+CS 31: Spring 2018
+
+curl -s -L http://cs.ucla.edu/classes/spring18/cs31/Utilities/p5tester | bash
+
+Project 5 Report
+1. Some obstacles overcome were determining the flow of control and handling edge cases such as knowing how much to print on a line if a word portion can't fit on the remaining characters left in the output line. Handling hyphens was another area of difficulty, especially when a word contained multiple consecutive hyphens. Another obstacle was figuring out how to process a word portion that is longer than lineLength. And if the last character read in from an input file is a newline or space character, I had trouble making sure my last text input ended with a newline and no extra spaces. Figuring out which boolean values to keep track of and any helper functions to implement were also obstacles in coding this project.
+
+2. Pseudocode:
+
+create character array to store word in until you encounter a space.
+(repeatedly):
+  read in character from the input file:
+    if its not a space nor newline:
+	store it in the character array
+	increment the position of array
+	process a space, or 2 spaces, or a new line to the outfile when appropriate
+	proceed to next iteration
+    otherwise:
+	check if the word is longer than the max length, shorter or equal, and process accordingly.
+	examine each character in the character array
+	check if its a paragraph break
+	    if so, then write an empty line to the outfile
+	process the character to the outfile
+	check line constraints whether a space or newline is needed
+	reset the array
+	
+Test Data:
+1. "Erlich is a fat pig." & lineLength = 20(exactly the length of the max line length)
+2. "Lebron James is a one man show. He won a winner-take-all Game 7. He has 4 MVPs." lineLength = 20, (a space is the 20th character of this sentence)
+3. Eastside! Cleveland. I guess. & lineLength = 5 (a wordPortion is greater than the max line length in this sentence)
+4. "Erlich Bachmann is a lying conman and fraud. He rejected my Not Hotdog App." & lineLength = 7 (a word portion is greater than lineLength)
+5. "Jeff Bezos should be coming to my brunches!!" & lineLength = 5 (edge case, a space is the 5th character of the sentence.)
+6. "#P##P#" & lineLength = 6 (should be processed as a word, not as two paragraph breaks
+7. "This #P# is me." & lineLength = 5
+8. "Computer #P# #P# Science" & lineLength = 10 (should be processed as just one paragraph break)
+9. "You think you're a leader but you're not that nice." & lineLength = 10
+10. "I had to come back just to give y'all life." & lineLength = 3 (word portion like "had" is divided up)
+11. "Made Golden State form a super team." & lineLength = 6 (for testing input where a word is exactly equal to the input of the max line length)
+12. "Incentive-laden" & lineLength = 9 (the hyphen is the 10th character so it should be on a new line.)
+13. "Winner-take-all" & lineLength = 3 (hyphenated word portions should be dealt with correctly)
+14. "#P#" & lineLength = 2 (should return 0 and write no output to the outfile)
+
+
