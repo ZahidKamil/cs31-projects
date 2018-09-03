@@ -1,0 +1,158 @@
+Kevin Hahn
+CS 31: Spring 2018
+UID: 504-914-505
+Project 3 Report
+
+1. Some obstacles overcome were figuring out which helper functions to use. Most of the code and control flow used for determining a syntactically correct song could be revised and used for creating the bool isTranslatable(string song) function and 
+string translate(string song) function. Another obstacle was figuring out how to evaluate, character by character, each possible scenario that a beat could. For instance, inspecting a slash takes less code and control flow than tracing through a sustained note.
+The off-by-one runtime error and was a frequent obstacle in my loops when returning badBeat and handling the boundary cases of position when reaching the final character of the string entered for the variable song. Another hurdle was writing the control flow to translate a slash as 'x' when appropriate.
+
+2. 
+My program contained several helper functions in addition to the 2 mandatory functions we needed to turn in. 
+The helper function isSlash(char c):
+	if c is front slash
+		return true
+	return false otherwise
+-----------------------------------------------------------------------
+The helper function isColor(char c):
+	if c is any one of the following: G, R, Y, B, O, g, r, y, b, o
+		return true
+	return false otherwise
+-----------------------------------------------------------------------
+The helper function isTranslatable(string song):
+    if song is syntactically correct:
+        go through song character by character
+	check if character is a color or slash
+		if slash
+   		  advance position	    
+		if color
+		  if color followed by 1-2 digits        
+		      if sustained note less than 2
+			return false
+		      if a beat of sustained note is not a slash
+			return false
+		      if song ends prematurely
+		        return false
+	return true if entire loop is completed without returning false
+-------------------------------------------------------------------------
+The helper function translate(string song) translates a translatable song into the specified instructions and is used in the translateSong function and stores the translation into the passed-by-reference variable instructions. 
+translate(string song):
+    create empty string variable to store translation in
+    if song is translatable
+        go through song character by character
+	  repeatedly:
+	    if character is a color 
+		if color is followed by 1-2 digits
+	            then append however many uppercase characters of that color
+	        otherwise, if followed by a slash
+		    then append a lower case character of that color
+	    else if character is a slash
+		    then append a lowercase 'x'
+     return the translation
+--------------------------------------------------------------------------
+Pseudocode of the 2 mandatory functions:
+bool hasCorrectSyntax(string song)
+{
+    if song is the empty string
+	return true
+    else if song is just the front slash character
+	return true
+    else if song has 2 characters
+	return true if song is just 2 front slashes or color + front slash
+    else
+	go through song character by character
+	  repeatedly:
+	    check if given character is a color or a slash
+	    advance position
+	    check if color is followed by a slash or a digit 
+	        return false otherwise
+	    advance position
+	    check if slash is followed by a color or another slash
+		return false otherwise
+	    advance position
+	    check if digit is followed by another digit or a slash
+		return false otherwise
+	    advance position
+        return true
+---------------------------------------------------------------------------------------------------------------
+int translateSong(string song, string& instructions, int badBeat)
+{
+check if song has incorrect syntax
+	return 1 and leave instructions and badBeat unchanged
+if song has correct syntax
+	check if song is translatable
+	if translatable, 
+		translate the song
+		store the translation in instructions 
+		leave badBeat unchanged
+		return 0
+	otherwise, 
+	    leave instructions unchanged
+	    inspect the song character by character
+	    keep a running total of beats 
+	    repeatedly:
+		if given character is a color
+			if color is followed by a slash
+				advance position
+				increment beat
+			otherwise
+				we are dealing with a sustained note
+				increment beats for every slash mark that immediately follows the sustained note of specified length
+				if sustained note is less than 2
+					return 2 and set badBeat to that erroneous beat
+				if sustained note is not followed by the specified number of slashes
+					return 3 and set badBeat to that erroneous beat
+				if song ends prematurely
+					return 4, set badBeat to one more than number of beats in string
+		if given character is a slash
+				advance position
+				increment beats			
+}
+
+3. 
+Test data for translateSong function:
+string instruction = "Guitar Hero"
+int badBeat = -999
+1. ("o/r2/", instruction, badBeat)
+	This is a song that ends prematurely, so it should return 4 and set badBeat to 3 (one more than the number of beats in the string)
+2. ("r/b5////g/", instruction, badBeat)
+	This is a song that contains a sustained note where the fifth beat does not consist of a slash. Function should return 3, and set badBeat to 6
+3. ("r2//b", instruction, badBeat)
+	This song is not syntactically correct, so function should return 1 and leave the other 2 variables unchanged
+4. ("r/b/g3///y/", instruction, badBeat)
+	This song is translatable, and the function should return 0, change instructions to the translation of the song, and leave badBeat unchanged.
+5. ("b/R/o3///", instruction, badBeat)
+	This is a translatabe song with upper case letters, and function should still change instructions to the translation of song, return 0 and leave badBeat unchanged
+6. ("g31//", instruction, badBeat)
+	This song ends prematurely, and we want to make sure the function returns 4 and sets badBeat to 3
+7. ("g01/b/y3///", instruction, badBeat)
+	This song contains a sustained note of length less than 2, so we want to make sure the function returns 2 and sets badBeat to 1 since its on the first beat.
+8. ("g0/r2//", instruction, badBeat)
+	This song contains a sustained note of length less than 2, so we want to make sure the function returns 2 and sets badBeat to 1 since its on the first beat
+9. ("r4////g01/", instruction, badBeat)
+	This song contains a sustained note of length less than 2 at the end of the song, so the function should still return 2 and set badBeat to 5 since it's the fifth beat.
+10. ("b3//", instruction, badBeat)
+	This song ends prematurely and it only consists of just this sustained note, and it should return 4 and set badBeat to 3.
+11. ("o00/", instruction, badBeat)
+	This song has a sustained note of length less than 2 and function should return 2 and set bad beat to 1.
+
+Test data for hasCorrectSyntax function:
+1. (""), the empty string is a syntactically correct beat
+2. ("/"), just the front slash is a syntactically correct beat
+3. ("1"), a song of one character that is not a slash is not syntactically correct
+4.("?"), same explanation as #3
+5. ("p"), same explanation as #3
+6. ("b/"), syntactically correct song of 2 characters is either 2 slashes or color followed by a slash
+7. ("//") same reasoning as #6
+8. ("?!") syntactically correct song can only contain colors, digits, or slashes. function should return false.
+9. ("/b") syntactically correct song cannot end on a color, must end on a slash. function should return false
+10. ("///") syntactically correct song can consist of all slashes. function should return true.
+11. ("y//"), syntactically correct song can have a color followed by multiple slashes afterwards. function should return true.
+12. ("g0/b//g2/"), although not translatable, a syntactically correct song can have a sustained note less than 2
+13. ("g00/y/g32///"), same reasoning as #12
+14. ("o/y04////b02/"), syntactically correct song can have a color followed by a 0 and nonzero digit
+15. ("g22/"), although not translatable, the song is syntactically correct since its beat consists of a color followed by 2 digits followed by a slash.
+16. ("b02//"), the song is  syntactically correct and should return true because it consists of a color followed by 2 digits followed by a slash
+17. ("g/y44////y0"), a syntactically correct song cannot end on a character other than a slash.
+
+
